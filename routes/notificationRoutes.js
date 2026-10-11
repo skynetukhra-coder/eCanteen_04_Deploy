@@ -46,7 +46,19 @@ router.get("/list", async (req, res) => {
         const [rows] = await db.query(
             "SELECT * FROM notifications ORDER BY id DESC"
         );
-        res.json(rows);
+        const formattedRows = rows.map(item => {
+            let img = item.image_url;
+            if (img && typeof img === "string" && img.trim() !== "") {
+                if (!img.startsWith("/") && !img.startsWith("http")) {
+                    img = `/uploads/${img}`;
+                }
+            }
+            return {
+                ...item,
+                image_url: img
+            };
+        });
+        res.json(formattedRows);
     } catch (err) {
         console.error("GET NOTIFICATIONS ERROR:", err);
         res.status(500).json({ success: false, message: err.message });

@@ -72,7 +72,20 @@ router.get("/:category", async (req, res) => {
             [queryCategories]
         );
 
-        res.json(rows);
+        const formattedRows = rows.map(item => {
+            let img = item.image_url;
+            if (!img || typeof img !== "string" || img.trim() === "") {
+                img = "/food_1.png";
+            } else if (!img.startsWith("/") && !img.startsWith("http")) {
+                img = `/uploads/${img}`;
+            }
+            return {
+                ...item,
+                image_url: img
+            };
+        });
+
+        res.json(formattedRows);
 
     } catch (error) {
         console.error(error);
