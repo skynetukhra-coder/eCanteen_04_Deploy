@@ -7,19 +7,7 @@ exports.getAllItems = async (req, res) => {
             FROM menu_items
             ORDER BY item_id DESC
         `);
-        const formattedRows = rows.map(item => {
-            let img = item.image_url;
-            if (!img || typeof img !== "string" || img.trim() === "") {
-                img = "/food_1.png";
-            } else if (!img.startsWith("/") && !img.startsWith("http")) {
-                img = `/uploads/${img}`;
-            }
-            return {
-                ...item,
-                image_url: img
-            };
-        });
-        return res.json(formattedRows);
+        return res.json(rows);
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, message: err.message });
@@ -60,19 +48,7 @@ exports.getSalesReport = async (req, res) => {
         `;
 
         const [rows] = await db.query(query, params);
-        const formattedRows = rows.map(item => {
-            let img = item.image_url;
-            if (!img || typeof img !== "string" || img.trim() === "") {
-                img = "/food_1.png";
-            } else if (!img.startsWith("/") && !img.startsWith("http")) {
-                img = `/uploads/${img}`;
-            }
-            return {
-                ...item,
-                image_url: img
-            };
-        });
-        return res.json(formattedRows);
+        return res.json(rows);
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, message: err.message });

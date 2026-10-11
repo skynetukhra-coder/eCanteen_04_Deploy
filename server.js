@@ -46,19 +46,10 @@ app.use(
     "/uploads",
     express.static(
         path.join(__dirname, "uploads")
-    ),
-    (req, res) => {
-        // Fallback for missing uploads images to avoid broken images on menu
-        const fallback = path.resolve(__dirname, "public", "food_1.png");
-        if (fs.existsSync(fallback)) {
-            return res.sendFile(fallback);
-        }
-        res.status(404).send("Image not found");
-    }
+    )
 );
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/public", express.static(path.join(__dirname, "public")));
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
